@@ -1,5 +1,5 @@
 POINT
-x = 0
+x = 8.0
 y = 4.5
 pnt1
 LINE

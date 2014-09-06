@@ -7,7 +7,6 @@ using namespace std;
 extern "C" int yylex ();
 extern "C" int yyparse (void);
 extern "C" FILE *yyin;
-//extern int line_no;
 
 void yyerror(const char *s);
 #define YYDEBUG 1
@@ -15,27 +14,26 @@ void yyerror(const char *s);
 %}
 
 %union{
-	float xval;
-	float yval;
+	char *xval;
+	char *yval;
 	char *ename;
 }
 
 %token ENDL
 %token <ename> ENAME
-%token XVAL
-%token YVAL
+%token <xval> XVAL
+%token <yval> YVAL
 
 %%
 
 converter:
 	converter ENAME { cout << "entity = " << $2 << endl; }
-	| converter XVAL {// x -> xval = $2; 
-cout << "x value = " << endl; }
-	| converter YVAL {// y -> yval = $2; 
-cout << "y value = " << endl; }
+	| converter XVAL { cout << $2 << endl; }
+	| converter YVAL { cout << $2 << endl; }
 	| ENAME { cout << "entity = " << $1 << endl; }
-	| XVAL { cout << "xvalue " << endl; }
-	| YVAL { cout << "yvalue " << endl; }
+	| XVAL { cout << $1 << endl; }
+	| YVAL { cout << $1 << endl; }
+
 /*converter:
 	data { cout << "Read the file\n"; }
 	;
@@ -48,9 +46,11 @@ data_lines:
 	| data_line
 	;
 data_line: 
-	ENAME XVAL YVAL { cout << "Entity Information\n" << $1 << endl; }
+	ENAME XVAL YVAL { cout << "Entity Information\n" << $1 << endl << $2 << $3 << endl; }
 	;
-*/%%
+*/
+
+%%
 
 main() {
 	FILE *myfile = fopen("conv.aj", "r");
@@ -63,13 +63,12 @@ main() {
 	yyin = myfile;
 
 	do{
-		yydebug = 1;
+//		yydebug = 1;
 		yyparse();
 	} while (!feof(yyin));
-	yydebug = 2;
 }
 
 void yyerror(const char *s) {
-	//cout << "Parser error on line " << line_no << "! Message: " << s << endl;
+	cout << "Parser error! Message: " << s << endl;
 	exit(-1);
 }

@@ -1,22 +1,26 @@
 %{
 #include <iostream>
 #include <cstdio>
+using namespace std;
 
 #define YY_DECL extern "C" int yylex()
 
 #include "conv.tab.h"
-using namespace std;
-
-//int line_no = 1;
 %}
-eq [ \t]*=
+
+digit [0-9]+
+float {digit}*"."{digit}
+eq [ =]+[\t]*
+
 %%
 
 [ \t]		;
-(?:POINT|LINE)	{ yylval.ename = strdup(yytext); return ENAME; }
-x{eq}		{ yylval.xval = atof(yytext);
-			return XVAL; }
-y{eq}		{ yylval.yval = atof(yytext);
-			return YVAL; }
+(?:POINT|LINE)	{ yylval.ename = strdup(yytext); return ENAME;	}
+
+x+{eq}+{float}+		{ yylval.xval = strdup(yytext); return XVAL; }
+
+y+{eq}+{float}+		{ yylval.yval = strdup(yytext); return YVAL; }
+
 .		;
 %%
+
