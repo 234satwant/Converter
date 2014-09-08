@@ -14,8 +14,8 @@ void yyerror(const char *s);
 %}
 
 %union{
-	char *xval;
-	char *yval;
+	float xval;
+	float yval;
 	char *ename;
 }
 
@@ -69,6 +69,6 @@ main() {
 }
 
 void yyerror(const char *s) {
-	cout << "Parser error! Message: " << s << endl;
+cout << "Parser error! Message: " << s << endl;
 	exit(-1);
 }
