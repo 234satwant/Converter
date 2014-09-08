@@ -40,4 +40,3 @@ y+{eq}+{float}+    { yylval.yval = split(yytext);
 . ;
 
 %%
-

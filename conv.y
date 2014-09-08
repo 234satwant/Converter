@@ -27,10 +27,10 @@ void yyerror(const char *s);
 %%
 
 converter:
-	converter ENAME { cout << "entity = " << $2 << endl; }
+	converter ENAME { cout << $2 << endl; }
 	| converter XVAL { cout << $2 << endl; }
 	| converter YVAL { cout << $2 << endl; }
-	| ENAME { cout << "entity = " << $1 << endl; }
+	| ENAME { cout << $1 << endl; }
 	| XVAL { cout << $1 << endl; }
 	| YVAL { cout << $1 << endl; }
 
