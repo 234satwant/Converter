@@ -14,7 +14,6 @@ void yyerror(const char *s);
 class write_file
 {
 	string exp_f_name;
-//	ofstream f("conv.try", ios::out);
 
 public:
 	write_file()
@@ -28,16 +27,23 @@ public:
 	{
 		ofstream f(exp_f_name.c_str(), ios::app);
 		if ( s.compare("POINT") == 0)
-		{ f << "BINDU" << endl;    }
+		{ f << "\nBINDU";    }
 		else if ( s.compare("LINE") == 0)
-		{ f << "REKHA" << endl;    }
+		{ f << "\nREKHA";    }
 	}	
 
-	void write_file_float(float s)
+	void write_file_floatx(float s)
 	{
 		ofstream f(exp_f_name.c_str(), ios::app);
-		f << s << endl;
+		f << " (" << s <<", ";
 	}
+
+        void write_file_floaty(float s)
+        {
+                ofstream f(exp_f_name.c_str(), ios::app);
+                f << s <<") ";
+        }
+
 }w;
 
 %}
@@ -57,34 +63,15 @@ public:
 
 converter:
 	converter ENAME { w.write_file_str($2); }
-	| converter XVAL { w.write_file_float($2); }
-	| converter YVAL { w.write_file_float($2); }
+	| converter XVAL { w.write_file_floatx($2); }
+	| converter YVAL { w.write_file_floaty($2); }
 	| ENAME { w.write_file_str($1); }
-	| XVAL { w.write_file_float($1); }
-	| YVAL { w.write_file_float($1); }
-
-/*converter:
-	data { cout << "Read the file\n"; }
-	;
-data:
-	data_lines data_line
-	| data_line
-	;
-data_lines:
-	data_lines data_line
-	| data_line
-	;
-data_line: 
-	ENAME XVAL YVAL { cout << "Entity Information\n" << $1 << endl << $2 << $3 << endl; }
-	;
-*/
-
+	| XVAL { w.write_file_floatx($1); }
+	| YVAL { w.write_file_floaty($1); }
 %%
 
 main() 
-
 {
-//write_file w;
 	string imp_f_name; 
 	cout << "Enter the name of file you want to import\n";
 	cin >> imp_f_name;
