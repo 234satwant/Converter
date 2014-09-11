@@ -8,7 +8,7 @@ using namespace std;
 
 #include "conv.tab.h"
 
-float split( std::string s){
+float splitGNE( std::string s ){
 
 std::string delimiter = "=";
 float t;
@@ -20,23 +20,59 @@ t = atof(s.c_str());
 return t;
 }
 
+float splitGDX( std::string s ){
+
+std::string delimiter = "(";
+
+size_t pos = 0;
+while ((pos = s.find(delimiter)) != std::string::npos) {
+    s.erase(0, pos + delimiter.length());
+}
+float t;
+t = atof(s.c_str());
+return t;
+}
+
+float splitGDY( std::string s ){
+
+std::string delimiter = ", ";
+
+size_t pos = 0;
+while ((pos = s.find(delimiter)) != std::string::npos) {
+    s.erase(0, pos + delimiter.length());
+}
+float t;
+t = atof(s.c_str());
+return t;
+}
+
 %}
 
-digit [0-9]+
-float {digit}*"."{digit}
-eq [= ]+[\t]*
-
+digit	[0-9]+
+float	{digit}*"."{digit}
+gne	[= ]+[\t]*
+a	[a-zA-Z]+
+gdx	{a}+{digit}+[(]+{float}+
+gdy	[ \t]*{float}+[)]+
 %%
 
 [ \t] ;
-POINT|LINE	   { yylval.ename = strdup(yytext); return ENAME; }
+POINT|LINE	   { yylval.ename = strdup(yytext); return ENAMEgd; }
 
-x+{eq}+{float}+	   { yylval.xval = split(yytext); 
-		     return XVAL; }
+x+{gne}+{float}+   { yylval.xval = splitGNE(yytext); 
+		     return XVALgd; }
 
-y+{eq}+{float}+    { yylval.yval = split(yytext);
-		     return YVAL; }
+y+{gne}+{float}+   { yylval.yval = splitGNE(yytext);
+		     return YVALgd; }
+
+BINDU|REKHA	   { yylval.ename = strdup(yytext); return ENAMEgne; }
+
+{gdx}		   { yylval.xval = splitGDX(yytext);
+		     return XVALgne; }
+
+{gdy}              { yylval.yval = splitGDY(yytext);
+                     return YVALgne; }
 
 . ;
 
-%%
+
