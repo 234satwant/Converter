@@ -1,3 +1,3 @@
 bison -d conv.y
 flex conv.l
-g++ conv.tab.c lex.yy.c -lfl -o conv
+g++ parser.cc conv.tab.c lex.yy.c -lfl -o conv
