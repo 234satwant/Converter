@@ -1,6 +1,6 @@
 #include "parser.h"
 
-select_format::select_format()
+int select_format::start_function()
 {
 	start_end_func("*", 20);
         cout << "Enter the file format you want to convert\n";
@@ -17,6 +17,7 @@ select_format::select_format()
              {  exp_f_name = f_name + ".gne";  }
 
         ofstream f(exp_f_name.c_str(), ios::out);
+	return ch;
 }
 
 void select_format::start_end_func(string symbol, int times)
@@ -30,16 +31,25 @@ void select_format::start_end_func(string symbol, int times)
 
 void select_format::WriteGNEfile_entity(std::string s)
 {
-        ofstream f(exp_f_name.c_str(), ios::app);
-        if ( s.compare("POINT") == 0)
-             {  f << "\nBINDU";  }
-        else if ( s.compare("LINE") == 0)
-             {  f << "\nREKHA";  }
+	ifstream read("conv.txt", ios::in);
+	string input_str;
+
+	while(!read.eof())
+	{
+		input_str = "0";
+		read >> input_str;
+
+        	ofstream f(exp_f_name.c_str(), ios::app);
+        	if ( s.compare(input_str.c_str()) == 0)
+             		{  f << "\n" << input_str;  }
+	}
+	read.close();
 }
 
 void select_format::WriteGNEfile_xy(float s, char coordinate)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
+	//int i = n;
         if (coordinate == 'x')
              f << " (" << s << ", ";
         else
@@ -48,11 +58,25 @@ void select_format::WriteGNEfile_xy(float s, char coordinate)
 
 void select_format::WriteGDfile_entity(std::string s)
 {
-        ofstream f(exp_f_name.c_str(), ios::app);
-        if ( s.compare("BINDU") == 0)
-             {  f << "POINT\n";  }
-        else if ( s.compare("REKHA") == 0)
-             {  f << "\nLINE\n";  }
+	ifstream read("conv.txt", ios::in);
+        string input_str;
+
+        while(!read.eof())
+        {
+                input_str = "0";
+                read >> input_str;
+
+                ofstream f(exp_f_name.c_str(), ios::app);
+                if ( s.compare(input_str.c_str()) == 0)
+                        {
+			    string neglect = ":";
+			    read >> input_str;
+			    if(neglect.compare(input_str.c_str()) == 0)
+				read >> input_str;
+			    f << input_str << "\n";
+			}
+        }
+        read.close();
 }
 
 void select_format::WriteGDfile_xy(float s, char coordinate)

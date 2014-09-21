@@ -59,11 +59,11 @@ gne	[= ]+[\t]*
 char	[a-zA-Z]+
 gdx	[(]+{float}+
 gdy	[ \t]*{float}+[)]+
-symbols [([]
+
 %%
 
 [ \t\n] ;
-{char}+{digit}+{symbols}*    { yylval.ename = strdup(yytext); return NAMEgne;}
+{char}+{digit}+    { yylval.ename = strdup(yytext); return NAMEgne;}
 
 POINT|LINE	   { yylval.ename = strdup(yytext); return ENAMEgd; }
 
