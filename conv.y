@@ -17,7 +17,7 @@ static float	y_coord [1024];
 static string	entity_type [1024];
 static string	entity_name [1024];
 */
-int x_no = 0, y_no = 0, e_t = 0, e_n = 0;
+int x_no, y_no = 0, e_t = 0, e_n = 0;
 %}
 
 %union{
@@ -37,16 +37,16 @@ int x_no = 0, y_no = 0, e_t = 0, e_n = 0;
 
 converter:
 	converter ENAMEgd { s.WriteGNEfile_entity($2);}
-	| converter XVALgd { s.x_coord [x_no] = $2; cout << "x_coordinate	" << s.x_coord[x_no] << "		" << x_no << endl; x_no++; /*s.WriteGNEfile_xy(x_coord[x_no], 'x');*/ }
-	| converter YVALgd { s.y_coord [y_no] = $2; cout << "y_coordinate	" << s.y_coord[y_no] << "             " << y_no << endl; y_no++; }
+	| converter XVALgd { s.x_coord [x_no] = $2; x_no++; } 
+	| converter YVALgd { s.y_coord [y_no] = $2; y_no++; }
 	| converter NAMEgd { cout << "GD " << $2 << endl; }
 	| converter ENAMEgne { s.WriteGDfile_entity($2); }
         | converter XVALgne { s.WriteGDfile_xy($2, 'x'); }
         | converter YVALgne { s.WriteGDfile_xy($2, 'y'); }
 	| converter NAMEgne { cout << "GNE " << $2 << endl; }
         | ENAMEgd { s.WriteGNEfile_entity($1); }
-        | XVALgd { s.x_coord [x_no] = $1; cout << "x_coordinate " << s.x_coord[x_no] << "	      " << x_no << endl; x_no++; }
-        | YVALgd { s.y_coord [y_no] = $1; cout << "y_coordinate " << s.y_coord[y_no] << "             " << y_no << endl; y_no++; }
+        | XVALgd { s.x_coord [x_no] = $1; x_no++; }
+        | YVALgd { s.y_coord [y_no] = $1; y_no++; }
 	| NAMEgd { cout << "GD " << $1 << endl; }
 	| ENAMEgne { s.WriteGDfile_entity($1); }
 	| XVALgne { s.WriteGDfile_xy($1, 'x'); }
@@ -75,6 +75,8 @@ int main()
 	}
 	yyin = myfile;
 
+	s.total_values(x_no);
+	s.Write_file();
 	do{
 //		yydebug = 1;
 		yyparse();

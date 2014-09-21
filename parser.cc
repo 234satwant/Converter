@@ -46,14 +46,13 @@ void select_format::WriteGNEfile_entity(std::string s)
 	read.close();
 }
 
-void select_format::WriteGNEfile_xy(float s, char coordinate)
+void select_format::WriteGNEfile_xy(float s[1024], char coordinate, int no)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-	//int i = n;
         if (coordinate == 'x')
-             f << " (" << s << ", ";
+             f << " (" << s[no] << ", ";
         else
-             f << s << ") ";
+             f << s[no] << ") ";
 }
 
 void select_format::WriteGDfile_entity(std::string s)
