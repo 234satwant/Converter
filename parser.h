@@ -22,23 +22,45 @@ class select_format
 	int total_values(int no_of_values)
 	{
 	    n = no_of_values;
-		cout << "n = " << n << endl;
 	    return n;
 	}
-
+void select_format1()
+{
+for (int i = 0; i < 3; i++)
+	cout << x_coord[i] << "		" << y_coord[i] << endl;
+}
 	void start_end_func(string symbol, int times);
         void WriteGNEfile_entity(std::string s);
         void WriteGNEfile_xy(float s[1024], char coordinate, int no);
         void WriteGDfile_entity(std::string s);
-        void WriteGDfile_xy(float s, char coordinate);
-	void Write_file()
+        void WriteGDfile_xy(float s[1024], char coordinate, int no);
+	void Store_values_xy(float s, int i, char xy)
 	{
+	    if ( xy == 'x')
+		{ x_coord[0] == s; cout << x_coord[0] << endl;}
+	    else 
+		{ y_coord[i] == s; }
+	}
+	void Write_file()
+	{	select_format1();
+	    if( ch == 2)
+	    {
 		for(int i = 0; i <= n; i++)
-		{ cout << x_coord[i] << "	hello	" << i << endl;
-//		    WriteGNEfile_entity(entity_type);
+		{
+		 //   WriteGNEfile_entity(entity_type);
         	    WriteGNEfile_xy(x_coord, 'x', i);
 		    WriteGNEfile_xy(y_coord, 'y', i);
 		}
+	    }
+	    else
+	    {
+		for(int i = 0; i <= n; i++)
+		{
+//                  WriteGDfile_entity(entity_type);
+                    WriteGDfile_xy(x_coord, 'x', i);
+                    WriteGDfile_xy(y_coord, 'y', i);
+                }
+	    }
 	}
 };
 #endif

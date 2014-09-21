@@ -78,8 +78,8 @@ void select_format::WriteGDfile_entity(std::string s)
         read.close();
 }
 
-void select_format::WriteGDfile_xy(float s, char coordinate)
+void select_format::WriteGDfile_xy(float s[1024], char coordinate, int no)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        f << coordinate << " = " << s << "\n";
+        f << coordinate << " = " << s[no] << "\n";
 }
