@@ -41,7 +41,10 @@ void select_format::WriteGNEfile_entity(string s[1024], int i)
 
         	ofstream f(exp_f_name.c_str(), ios::app);
         	if ( s[i].compare(input_str.c_str()) == 0)
-             		{  f << "\n" << input_str;  }
+		{
+		   // reverse( input_str.begin(), input_str.end() ) ;
+		     f << "\n" << input_str;
+		}
 	}
 	read.close();
 }
@@ -49,10 +52,15 @@ void select_format::WriteGNEfile_entity(string s[1024], int i)
 void select_format::WriteGNEfile_xy(float s[1024], char coordinate, int no)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        if (coordinate == 'x')
-             f << " (" << s[no] << ", ";
-        else
-             f << s[no] << ") ";
+	if(no < n-1)
+        {
+	     if (coordinate == 'x')
+        	f << "(" << s[no] << ", ";
+             else
+       		if (no == 2)
+f << s[no] << ")]";
+else f << s[no] << ")";
+	}
 }
 
 void select_format::WriteGDfile_entity(string s[1024], int i)
@@ -81,18 +89,23 @@ void select_format::WriteGDfile_entity(string s[1024], int i)
 void select_format::WriteGDfile_xy(float s[1024], char coordinate, int no)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        f << coordinate << " = " << s[no] << "\n";
+	if(no < n-1)
+        { f << coordinate << " = " << s[no] << "\n"; }
 }
 
 void select_format::WriteGDfile_name(string s[1024], int i)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        f << s[i] << "\n";
+        if ( i >= 1 && i < 3) { f << s[i+1] << endl; }
+	else if (i == 3 ) { f << s[1] << endl; }
+	else { f << s[i] << "\n"; }
 }
 
 void select_format::WriteGNEfile_name(string s[1024], int i)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        f << s[i] << "\n";
+        if( i == 1) { f << " " << s[3] << "[" << s[i] << ", " << s[i+1] << "; " << s[i]; }
+	else if ( i == 0 ) { f << " " << s[i]; }
+	else if ( i == 2){ f << ", " <<  s[i]; }
 }
 

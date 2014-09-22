@@ -10,10 +10,15 @@ extern "C" FILE *yyin;
 
 void yyerror(const char *s);
 #define YYDEBUG 1
-int in (int i)
-{ return i; }
+
 select_format s;
-int x_no, y_no, e_t, e_n;
+int x_n, y_n, e_t, e_n;
+
+int in (int i)
+{ 
+        return i;
+}
+
 %}
 
 %union{
@@ -33,21 +38,19 @@ int x_no, y_no, e_t, e_n;
 
 converter:
 	converter ENAMEgd { e_t = e_n; s.Store_values_nametype($2, e_t, 't'); }
-	| converter XVALgd { x_no = e_n; s.Store_values_xy($2, x_no, 'x'); } 
-	| converter YVALgd { y_no = e_n; s.Store_values_xy($2, y_no, 'y'); }
-	| converter NAMEgd { s.Store_values_nametype($2, e_n, 'n'); in(e_n); e_n++; }
+	| converter XVALgd { s.Store_values_xy($2, x_n, 'x'); in(x_n); x_n++; } 
+	| converter YVALgd { s.Store_values_xy($2, y_n, 'y'); in(x_n); y_n++; }
 	| converter ENAMEgne { e_t = e_n; s.Store_values_nametype($2, e_t, 't'); }
-        | converter XVALgne { x_no = e_n; s.Store_values_xy($2, x_no, 'x'); }
-        | converter YVALgne { y_no = e_n; s.Store_values_xy($2, y_no, 'y'); }
-	| converter NAMEgne { s.Store_values_nametype($2, e_n, 'n'); in(e_n); e_n++; }
+        | converter XVALgne { s.Store_values_xy($2, x_n, 'x'); in(x_n); x_n++; }
+        | converter YVALgne { s.Store_values_xy($2, y_n, 'y'); in(y_n); y_n++; }
+	| converter NAMEgne { s.Store_values_nametype($2, e_n, 'n'); in(e_n); if(s.flag == 0) e_n++; }
         | ENAMEgd { e_t = e_n; s.Store_values_nametype($1, e_t, 't'); }
-        | XVALgd { x_no = e_n; s.Store_values_xy($1, x_no, 'x'); }
-        | YVALgd { y_no = e_n; s.Store_values_xy($1, y_no, 'y'); in(y_no); }
-	| NAMEgd { s.Store_values_nametype($1, e_n, 'n'); in(e_n); }
+        | XVALgd { s.Store_values_xy($1, x_n, 'x'); in(x_n); x_n++; }
+        | YVALgd { s.Store_values_xy($1, y_n, 'y'); in(y_n); y_n++; }
 	| ENAMEgne { e_t = e_n; s.Store_values_nametype($1, e_t, 't'); }
-	| XVALgne { x_no = e_n; s.Store_values_xy($1, x_no, 'x'); }
-	| YVALgne { y_no = e_n; s.Store_values_xy($1, y_no, 'y'); }
-	| NAMEgne { s.Store_values_nametype($1, e_n, 'n'); in(e_n); e_n++; }
+	| XVALgne { s.Store_values_xy($1, x_n, 'x'); in(x_n); x_n++; }
+	| YVALgne { s.Store_values_xy($1, y_n, 'y'); in(y_n); y_n++; }
+	| NAMEgne { s.Store_values_nametype($1, e_n, 'n'); in(e_n); if(s.flag == 0) e_n++; }
 %%
 
 int main() 
@@ -73,11 +76,8 @@ int main()
 		yyparse();
 	} while (!feof(yyin));
 
-cout << e_n << endl;
-
         s.total_values(e_n);
         s.Write_file();
-
         s.start_end_func("*", 20);
 
 }

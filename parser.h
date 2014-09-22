@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,11 +12,17 @@ class select_format
 {
 	string exp_f_name, f_name;
 	public : int n;
-        int ch;
+        int ch, t_no, flag;
 	float    x_coord [1024];
 	float    y_coord [1024];
 	string   entity_type [1024];
 	string   entity_name [1024];
+
+	select_format()
+	{
+	    t_no = 0; 
+	//    flag = 0;
+	}
 
         int start_function();
 	int total_values(int no_of_values)
@@ -41,11 +48,23 @@ class select_format
 	}
 
 	void Store_values_nametype(string s, int i, char nt)
-	{
+	{	flag = 0;
 	    if(nt == 't')
-		{ entity_type[i] = s; }
+	    {
+		entity_type[i] = s;
+		if(t_no <= i)
+		    { t_no++; }
+	    }
 	    else
-		{ entity_name[i] = s; cout << entity_name[i] << "       " << i <<endl; }
+	    {
+		for(int l = t_no; l < i; l++)
+		{
+		    if(entity_name[l] == s)
+                        { flag++; }
+		}
+		if(!flag)
+		{ entity_name[i] = s; }
+	    }
 	}
 
 	void Write_file()
@@ -55,9 +74,9 @@ class select_format
 		for(int i = 0; i < n; i++)
 		{
 		    WriteGNEfile_entity(entity_type, i);
+                    WriteGNEfile_name(entity_name, i);
         	    WriteGNEfile_xy(x_coord, 'x', i);
 		    WriteGNEfile_xy(y_coord, 'y', i);
-                    WriteGNEfile_name(entity_name, i);
 		}
 	    }
 	    else
