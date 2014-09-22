@@ -32,22 +32,22 @@ int x_no, y_no, e_t, e_n;
 %%
 
 converter:
-	converter ENAMEgd { s.WriteGNEfile_entity($2); }
-	| converter XVALgd { s.x_coord [x_no] = $2; in(x_no); x_no++; } 
-	| converter YVALgd { s.y_coord [y_no] = $2; in(y_no); y_no++; }
-	| converter NAMEgd { cout << "GD " << $2 << endl; }
-	| converter ENAMEgne { s.WriteGDfile_entity($2); }
-        | converter XVALgne { s.Store_values_xy($2, x_no, 'x'); cout <<"hello " <<  s.x_coord[x_no] <<endl; in(x_no); x_no++; cout << "\ngne\n"; }
-        | converter YVALgne { s.Store_values_xy($2, y_no, 'y'); in(y_no); y_no++; }
-	| converter NAMEgne { cout << "GNE " << $2 << endl; }
-        | ENAMEgd { s.WriteGNEfile_entity($1); }
-        | XVALgd { s.x_coord [x_no] = $1; in(x_no); x_no++; }
-        | YVALgd { s.y_coord [y_no] = $1; in(y_no); y_no++; }
-	| NAMEgd { cout << "GD " << $1 << endl; }
-	| ENAMEgne { s.WriteGDfile_entity($1); }
-	| XVALgne { s.Store_values_xy($1, x_no, 'x'); in(x_no); x_no++; }
-	| YVALgne { s.Store_values_xy($1, y_no, 'y'); in(y_no); y_no++; }
-	| NAMEgne { cout << "GNE " << $1 << endl; }
+	converter ENAMEgd { e_t = e_n; s.Store_values_nametype($2, e_t, 't'); }
+	| converter XVALgd { x_no = e_n; s.Store_values_xy($2, x_no, 'x'); } 
+	| converter YVALgd { y_no = e_n; s.Store_values_xy($2, y_no, 'y'); }
+	| converter NAMEgd { s.Store_values_nametype($2, e_n, 'n'); in(e_n); e_n++; }
+	| converter ENAMEgne { e_t = e_n; s.Store_values_nametype($2, e_t, 't'); }
+        | converter XVALgne { x_no = e_n; s.Store_values_xy($2, x_no, 'x'); }
+        | converter YVALgne { y_no = e_n; s.Store_values_xy($2, y_no, 'y'); }
+	| converter NAMEgne { s.Store_values_nametype($2, e_n, 'n'); in(e_n); e_n++; }
+        | ENAMEgd { e_t = e_n; s.Store_values_nametype($1, e_t, 't'); }
+        | XVALgd { x_no = e_n; s.Store_values_xy($1, x_no, 'x'); }
+        | YVALgd { y_no = e_n; s.Store_values_xy($1, y_no, 'y'); in(y_no); }
+	| NAMEgd { s.Store_values_nametype($1, e_n, 'n'); in(e_n); }
+	| ENAMEgne { e_t = e_n; s.Store_values_nametype($1, e_t, 't'); }
+	| XVALgne { x_no = e_n; s.Store_values_xy($1, x_no, 'x'); }
+	| YVALgne { y_no = e_n; s.Store_values_xy($1, y_no, 'y'); }
+	| NAMEgne { s.Store_values_nametype($1, e_n, 'n'); in(e_n); e_n++; }
 %%
 
 int main() 
@@ -68,15 +68,17 @@ int main()
 		return -1;
 	}
 	yyin = myfile;
-
-	s.total_values(x_no);
-	s.Write_file();
 	do{
 //		yydebug = 1;
 		yyparse();
 	} while (!feof(yyin));
-cout << x_no;
-       s.start_end_func("*", 20);
+
+cout << e_n << endl;
+
+        s.total_values(e_n);
+        s.Write_file();
+
+        s.start_end_func("*", 20);
 
 }
 

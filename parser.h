@@ -11,7 +11,6 @@ class select_format
 {
 	string exp_f_name, f_name;
 	public : int n;
-       // public:
         int ch;
 	float    x_coord [1024];
 	float    y_coord [1024];
@@ -24,41 +23,51 @@ class select_format
 	    n = no_of_values;
 	    return n;
 	}
-void select_format1()
-{
-for (int i = 0; i < 3; i++)
-	cout << x_coord[i] << "		" << y_coord[i] << endl;
-}
+
 	void start_end_func(string symbol, int times);
-        void WriteGNEfile_entity(std::string s);
+        void WriteGNEfile_entity(string s[1024], int i);
         void WriteGNEfile_xy(float s[1024], char coordinate, int no);
-        void WriteGDfile_entity(std::string s);
+        void WriteGNEfile_name(string s[1024], int i);
+        void WriteGDfile_entity(string s[1024], int i);
         void WriteGDfile_xy(float s[1024], char coordinate, int no);
+        void WriteGDfile_name(string s[1024], int i);
+
 	void Store_values_xy(float s, int i, char xy)
 	{
 	    if ( xy == 'x')
-		{ x_coord[0] == s; cout << x_coord[0] << endl;}
+		{ x_coord[i] = s; }
 	    else 
-		{ y_coord[i] == s; }
+		{ y_coord[i] = s; }
 	}
+
+	void Store_values_nametype(string s, int i, char nt)
+	{
+	    if(nt == 't')
+		{ entity_type[i] = s; }
+	    else
+		{ entity_name[i] = s; cout << entity_name[i] << "       " << i <<endl; }
+	}
+
 	void Write_file()
-	{	select_format1();
+	{
 	    if( ch == 2)
 	    {
-		for(int i = 0; i <= n; i++)
+		for(int i = 0; i < n; i++)
 		{
-		 //   WriteGNEfile_entity(entity_type);
+		    WriteGNEfile_entity(entity_type, i);
         	    WriteGNEfile_xy(x_coord, 'x', i);
 		    WriteGNEfile_xy(y_coord, 'y', i);
+                    WriteGNEfile_name(entity_name, i);
 		}
 	    }
 	    else
 	    {
-		for(int i = 0; i <= n; i++)
+		for(int i = 0; i < n; i++)
 		{
-//                  WriteGDfile_entity(entity_type);
+                    WriteGDfile_entity(entity_type, i);
                     WriteGDfile_xy(x_coord, 'x', i);
                     WriteGDfile_xy(y_coord, 'y', i);
+	            WriteGDfile_name(entity_name, i);
                 }
 	    }
 	}

@@ -29,7 +29,7 @@ void select_format::start_end_func(string symbol, int times)
         cout << endl;
 }
 
-void select_format::WriteGNEfile_entity(std::string s)
+void select_format::WriteGNEfile_entity(string s[1024], int i)
 {
 	ifstream read("conv.txt", ios::in);
 	string input_str;
@@ -40,7 +40,7 @@ void select_format::WriteGNEfile_entity(std::string s)
 		read >> input_str;
 
         	ofstream f(exp_f_name.c_str(), ios::app);
-        	if ( s.compare(input_str.c_str()) == 0)
+        	if ( s[i].compare(input_str.c_str()) == 0)
              		{  f << "\n" << input_str;  }
 	}
 	read.close();
@@ -55,7 +55,7 @@ void select_format::WriteGNEfile_xy(float s[1024], char coordinate, int no)
              f << s[no] << ") ";
 }
 
-void select_format::WriteGDfile_entity(std::string s)
+void select_format::WriteGDfile_entity(string s[1024], int i)
 {
 	ifstream read("conv.txt", ios::in);
         string input_str;
@@ -66,7 +66,7 @@ void select_format::WriteGDfile_entity(std::string s)
                 read >> input_str;
 
                 ofstream f(exp_f_name.c_str(), ios::app);
-                if ( s.compare(input_str.c_str()) == 0)
+                if ( s[i].compare(input_str.c_str()) == 0)
                         {
 			    string neglect = ":";
 			    read >> input_str;
@@ -83,3 +83,16 @@ void select_format::WriteGDfile_xy(float s[1024], char coordinate, int no)
         ofstream f(exp_f_name.c_str(), ios::app);
         f << coordinate << " = " << s[no] << "\n";
 }
+
+void select_format::WriteGDfile_name(string s[1024], int i)
+{
+        ofstream f(exp_f_name.c_str(), ios::app);
+        f << s[i] << "\n";
+}
+
+void select_format::WriteGNEfile_name(string s[1024], int i)
+{
+        ofstream f(exp_f_name.c_str(), ios::app);
+        f << s[i] << "\n";
+}
+
