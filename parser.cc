@@ -32,21 +32,16 @@ void select_format::start_end_func(string symbol, int times)
 void select_format::WriteGNEfile_entity(string s[1024], int i)
 {
         ifstream read("conv.txt", ios::in);
-        string input_str;
+        string input_str1, input_str2, neglect;
 
         while(!read.eof())
         {
-                input_str = "0";
-                read >> input_str;
-
+               // input_str1 = "0";
+                read >> input_str1 >> neglect >> input_str2;
                 ofstream f(exp_f_name.c_str(), ios::app);
-                if ( s[i].compare(input_str.c_str()) == 0)
+                if ( s[i].compare(input_str2.c_str()) == 0)
                         {
-                            string neglect = ":";
-                            read >> input_str;
-                            if(neglect.compare(input_str.c_str()) == 0)
-                                read >> input_str;
-                            f << "\n" << input_str;
+                            f << "\n" << input_str1; break;
                         }
         }
         read.close();
@@ -113,3 +108,60 @@ void select_format::WriteGNEfile_name(string s[1024], int i)
 	else if ( i == 2){ f << ", " <<  s[i]; }
 }
 
+int select_format::total_values(int no_of_values)
+{
+	n = no_of_values;
+        return n;
+}
+
+void select_format::Store_values_xy(float s, int i, char xy)
+{
+	if ( xy == 'x')
+	    { x_coord[i] = s; }
+	else 
+	    { y_coord[i] = s; }
+}
+
+void select_format::Store_values_nametype(string s, int i, char nt)
+{
+	if(nt == 't')
+	{
+	    entity_type[i] = s;
+	    if(t_no <= i)
+	    { t_no++; }
+	}
+	else
+	{
+	    for(int l = t_no; l < i; l++)
+	    {
+		if(entity_name[l] == s)
+                    { flag++; }
+	    }
+	    if(!flag)
+		{ entity_name[i] = s; }
+	}
+}
+
+void select_format::Write_file()
+{
+	if( ch == 2)
+	{
+	    for(int i = 0; i < n; i++)
+	    {
+		WriteGNEfile_entity(entity_type, i);
+                WriteGNEfile_name(entity_name, i);
+        	WriteGNEfile_xy(x_coord, 'x', i);
+		WriteGNEfile_xy(y_coord, 'y', i);
+	    }
+	}
+	else
+	{
+	    for(int i = 0; i < n; i++)
+	    {
+                WriteGDfile_entity(entity_type, i);
+                WriteGDfile_xy(x_coord, 'x', i);
+                WriteGDfile_xy(y_coord, 'y', i);
+	        WriteGDfile_name(entity_name, i);
+            }
+	}
+}

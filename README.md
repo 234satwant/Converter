@@ -1,6 +1,6 @@
 Converter
 =========
-It is a converter which converts one file format to another. I have took an example of some .gd and .gne file formats. It can be compiled by using the script a.sh
+It is a converter which converts one file format to another. I have took an example of some .gd and .gne file formats. It can be compiled by using the script a.sh and using conv.gd and conv.gne as input files for testing.
 
 Install dependencies :-
 
