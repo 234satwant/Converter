@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <algorithm>
 
 using namespace std;
 
@@ -21,7 +20,6 @@ class select_format
 	select_format()
 	{
 	    t_no = 0; 
-	//    flag = 0;
 	}
 
         int start_function();

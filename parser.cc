@@ -31,22 +31,26 @@ void select_format::start_end_func(string symbol, int times)
 
 void select_format::WriteGNEfile_entity(string s[1024], int i)
 {
-	ifstream read("conv.txt", ios::in);
-	string input_str;
+        ifstream read("conv.txt", ios::in);
+        string input_str;
 
-	while(!read.eof())
-	{
-		input_str = "0";
-		read >> input_str;
+        while(!read.eof())
+        {
+                input_str = "0";
+                read >> input_str;
 
-        	ofstream f(exp_f_name.c_str(), ios::app);
-        	if ( s[i].compare(input_str.c_str()) == 0)
-		{
-		   // reverse( input_str.begin(), input_str.end() ) ;
-		     f << "\n" << input_str;
-		}
-	}
-	read.close();
+                ofstream f(exp_f_name.c_str(), ios::app);
+                if ( s[i].compare(input_str.c_str()) == 0)
+                        {
+                            string neglect = ":";
+                            read >> input_str;
+                            if(neglect.compare(input_str.c_str()) == 0)
+                                read >> input_str;
+                            f << "\n" << input_str;
+                        }
+        }
+        read.close();
+
 }
 
 void select_format::WriteGNEfile_xy(float s[1024], char coordinate, int no)
