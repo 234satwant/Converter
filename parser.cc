@@ -175,9 +175,19 @@ void select_format::Write_file()
 	    for(int i = 0; i < n; i++)
 	    {
                 WriteGDfile_entity(entity_type, i);
+
+		if(entity_type[i] == "" && entity_type[i+1] != "")
+		{
+		    for(int j = n; j > i; j--)
+		    {
+			x_coord[j+1] = x_coord[j];
+			y_coord[j+1] = y_coord[j];
+		    }
+		}
+
 		if(entity_type[i] != "")
 		{
-			int k = i+1;
+		    int k = i+1;
                     WriteGDfile_xy(x_coord, 'x', i);
                     WriteGDfile_xy(y_coord, 'y', i);
 		    while (entity_type[i+1] == "" && k < n)
@@ -193,25 +203,7 @@ void select_format::Write_file()
 		    }
 		    WriteGDfile_name(entity_name, i);
 		}
-		
-
              }
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
