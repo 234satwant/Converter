@@ -36,7 +36,6 @@ void select_format::WriteGNEfile_entity(string s[1024], int i)
 
         while(!read.eof())
         {
-               // input_str1 = "0";
                 read >> input_str1 >> neglect >> input_str2;
                 ofstream f(exp_f_name.c_str(), ios::app);
                 if ( s[i].compare(input_str2.c_str()) == 0)
@@ -51,15 +50,10 @@ void select_format::WriteGNEfile_entity(string s[1024], int i)
 void select_format::WriteGNEfile_xy(float s[1024], char coordinate, int no)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-	if(no < n-1)
-        {
-	     if (coordinate == 'x')
-        	f << "(" << s[no] << ", ";
-             else
-       		if (no == 2)
-f << s[no] << ")]";
-else f << s[no] << ")";
-	}
+	if (coordinate == 'x')
+            f << "(" << s[no] << ", ";
+        else
+	    f << s[no] << ")";
 }
 
 void select_format::WriteGDfile_entity(string s[1024], int i)
@@ -69,18 +63,18 @@ void select_format::WriteGDfile_entity(string s[1024], int i)
 
         while(!read.eof())
         {
-                input_str = "0";
-                read >> input_str;
+            input_str = "0";
+            read >> input_str;
 
-                ofstream f(exp_f_name.c_str(), ios::app);
-                if ( s[i].compare(input_str.c_str()) == 0)
-                        {
-			    string neglect = ":";
-			    read >> input_str;
-			    if(neglect.compare(input_str.c_str()) == 0)
-				read >> input_str;
-			    f << input_str << "\n";
-			}
+            ofstream f(exp_f_name.c_str(), ios::app);
+            if ( s[i].compare(input_str.c_str()) == 0)
+            {
+		string neglect = ":";
+		read >> input_str;
+		if(neglect.compare(input_str.c_str()) == 0)
+		    read >> input_str;
+		    f << input_str << "\n";
+	    }
         }
         read.close();
 }
@@ -88,24 +82,23 @@ void select_format::WriteGDfile_entity(string s[1024], int i)
 void select_format::WriteGDfile_xy(float s[1024], char coordinate, int no)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-	if(no < n-1)
-        { f << coordinate << " = " << s[no] << "\n"; }
+        f << coordinate << " = " << s[no] << "\n";
 }
 
 void select_format::WriteGDfile_name(string s[1024], int i)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        if ( i >= 1 && i < 3) { f << s[i+1] << endl; }
-	else if (i == 3 ) { f << s[1] << endl; }
-	else { f << s[i] << "\n"; }
+	f << s[i] << "\n";
 }
 
 void select_format::WriteGNEfile_name(string s[1024], int i)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-        if( i == 1) { f << " " << s[3] << "[" << s[i] << ", " << s[i+1] << "; " << s[i]; }
+/*        if( i == 1) { f << " " << s[3] << "[" << s[i] << ", " << s[i+1] << "; " << s[i]; }
 	else if ( i == 0 ) { f << " " << s[i]; }
 	else if ( i == 2){ f << ", " <<  s[i]; }
+*/
+	f << " " << s[i];
 }
 
 int select_format::total_values(int no_of_values)
@@ -149,9 +142,32 @@ void select_format::Write_file()
 	    for(int i = 0; i < n; i++)
 	    {
 		WriteGNEfile_entity(entity_type, i);
-                WriteGNEfile_name(entity_name, i);
-        	WriteGNEfile_xy(x_coord, 'x', i);
-		WriteGNEfile_xy(y_coord, 'y', i);
+		if(entity_type[i] != "")
+		{
+		    int k = i+1;
+		    while( entity_type[k] == "" && k <= n)
+		    {	
+			WriteGNEfile_name(entity_name, k);
+			k++;
+		    }
+		    WriteGNEfile_name(entity_name, i);
+		}
+//                WriteGNEfile_name(entity_name, i);
+		if(x_coord[i] != 0L || y_coord[i] != 0L)
+		{
+        	    WriteGNEfile_xy(x_coord, 'x', i);
+		    WriteGNEfile_xy(y_coord, 'y', i);
+		}
+		if(entity_type[i] == "" && entity_type[i+1] != "")
+		{
+		    ofstream f(exp_f_name.c_str(), ios::app);
+		    f << "]";
+		}
+		else if(i == n-1)
+		{
+                    ofstream f(exp_f_name.c_str(), ios::app);
+                    f << "]";
+                }
 	    }
 	}
 	else
@@ -159,9 +175,43 @@ void select_format::Write_file()
 	    for(int i = 0; i < n; i++)
 	    {
                 WriteGDfile_entity(entity_type, i);
-                WriteGDfile_xy(x_coord, 'x', i);
-                WriteGDfile_xy(y_coord, 'y', i);
-	        WriteGDfile_name(entity_name, i);
-            }
+		if(entity_type[i] != "")
+		{
+			int k = i+1;
+                    WriteGDfile_xy(x_coord, 'x', i);
+                    WriteGDfile_xy(y_coord, 'y', i);
+		    while (entity_type[i+1] == "" && k < n)
+		    {
+			WriteGDfile_name(entity_name, k);
+			if(x_coord[k] != 0L || y_coord[k] != 0L)
+			{
+                	    WriteGDfile_xy(x_coord, 'x', k);
+                	    WriteGDfile_xy(y_coord, 'y', k);
+                	}
+
+			k++;
+		    }
+		    WriteGDfile_name(entity_name, i);
+		}
+		
+
+             }
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

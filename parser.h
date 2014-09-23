@@ -11,7 +11,7 @@ class select_format
 {
 	string exp_f_name, f_name;
 	public : int n;
-        int ch, t_no, flag;
+        int ch, t_no, flag, flag2;
 	float    x_coord [1024];
 	float    y_coord [1024];
 	string   entity_type [1024];
