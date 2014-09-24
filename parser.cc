@@ -98,7 +98,7 @@ void select_format::WriteGNEfile_name(string s[1024], int i)
 	else if ( i == 0 ) { f << " " << s[i]; }
 	else if ( i == 2){ f << ", " <<  s[i]; }
 
-//	f << " " << s[i];
+//	f << " " << s[i]; //cout << s[i] << "	";
 }
 
 int select_format::total_values(int no_of_values)
@@ -137,6 +137,8 @@ void select_format::Store_values_nametype(string s, int i, char nt)
 
 void select_format::Write_file()
 {
+//int j =0;
+
 	if( ch == 2)
 	{
 	    for(int i = 0; i < n; i++)
@@ -150,17 +152,9 @@ void select_format::Write_file()
 			y_coord[j+1] = y_coord[j];
 		    }
 		}
-		if(entity_type[i] != "")
-		{
-		    int k = i+1;
-		    while( entity_type[k] == "" && k <= n)
-		    {	
-			WriteGNEfile_name(entity_name, k);
-			k++;
-		    }
-		    WriteGNEfile_name(entity_name, i);
-		}
-//                WriteGNEfile_name(entity_name, i);
+
+		WriteGNEfile_name(entity_name, i);
+
 		if(x_coord[i] != 0L || y_coord[i] != 0L)
 		{
         	    WriteGNEfile_xy(x_coord, 'x', i);
@@ -177,16 +171,45 @@ void select_format::Write_file()
                     f << "]";
                 }
 
-		if(entity_type[i] != "" && entity_type[i+1] != "")
+/*		if( entity_type[i] != "")
 		{
-		    int k = i;
-		    while(entity_type[k] != "")
-		    {	cout << entity_name[k] << "	" << k << endl;
-			WriteGNEfile_name(entity_name, k);
-			k++;
+		    if(entity_type[i+1] != "")
+		    {
+			WriteGNEfile_name(entity_name, i);
+			WriteGNEfile_xy(x_coord, 'x', i);
+			WriteGNEfile_xy(y_coord, 'y', i);
 		    }
-		    cout << entity_name[i] << "	" << i << endl;
 		}
+		 else
+		 {
+                    ofstream f(exp_f_name.c_str(), ios::app);
+                    int k = 1;
+		    int t = i;
+		    while( entity_type[i+1] != "" )
+		    {	k++; }   
+		    if (j == 0)
+		    {j=1;
+	//		cout << entity_name[k+i] << endl;
+			WriteGNEfile_name(entity_name, k+i);
+			f << "[" ;
+			j = 1;
+                    }
+			
+               //     WriteGNEfile_name(entity_name, i-1);
+		    while(t < i+k)
+		    {
+			WriteGNEfile_name(entity_name, i-1);
+                        f << ", ";
+//			WriteGNEfile_name(entity_name, i);
+			t++;
+		    }
+	//		f<< "; ";
+		 }
+		
+
+*/
+
+
 	    }
 	}
 	else
