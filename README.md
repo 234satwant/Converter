@@ -5,11 +5,12 @@ It is a converter which converts one file format to another. I have took an exam
 Install dependencies :-
 
 <code>
-sudo apt-get install flex, sudo apt-get install bison 
+$ sudo apt-get install flex bison 
 </code>
 
 Commands to compile this code are :-
 
 <code>
-bash a.sh, ./conv
+$ bash a.sh
+$ ./conv
 </code>
