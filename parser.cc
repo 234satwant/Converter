@@ -94,11 +94,11 @@ void select_format::WriteGDfile_name(string s[1024], int i)
 void select_format::WriteGNEfile_name(string s[1024], int i)
 {
         ofstream f(exp_f_name.c_str(), ios::app);
-/*        if( i == 1) { f << " " << s[3] << "[" << s[i] << ", " << s[i+1] << "; " << s[i]; }
+        if( i == 1) { f << " " << s[3] << "[" << s[i] << ", " << s[i+1] << "; " << s[i]; }
 	else if ( i == 0 ) { f << " " << s[i]; }
 	else if ( i == 2){ f << ", " <<  s[i]; }
-*/
-	f << " " << s[i];
+
+//	f << " " << s[i];
 }
 
 int select_format::total_values(int no_of_values)
@@ -142,6 +142,14 @@ void select_format::Write_file()
 	    for(int i = 0; i < n; i++)
 	    {
 		WriteGNEfile_entity(entity_type, i);
+		if(entity_type[i] == "" && entity_type[i+1] != "")
+		{
+		    for(int j = n; j > i; j--)
+		    {
+			x_coord[j+1] = x_coord[j];
+			y_coord[j+1] = y_coord[j];
+		    }
+		}
 		if(entity_type[i] != "")
 		{
 		    int k = i+1;
@@ -168,6 +176,17 @@ void select_format::Write_file()
                     ofstream f(exp_f_name.c_str(), ios::app);
                     f << "]";
                 }
+
+		if(entity_type[i] != "" && entity_type[i+1] != "")
+		{
+		    int k = i;
+		    while(entity_type[k] != "")
+		    {	cout << entity_name[k] << "	" << k << endl;
+			WriteGNEfile_name(entity_name, k);
+			k++;
+		    }
+		    cout << entity_name[i] << "	" << i << endl;
+		}
 	    }
 	}
 	else
